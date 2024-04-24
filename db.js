@@ -4,15 +4,19 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+let mongoServer;
+
 async function connectDb() {
     try {
         if (process.env.NODE_ENV === 'test') {
             mongoServer = await MongoMemoryServer.create();
             const uri = mongoServer.getUri();
             await mongoose.connect(uri);
+            console.log("Connected to test db");
         } else {
             const uri = process.env.MONGODB_URI;
-            await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+            await mongoose.connect(uri);
+            console.log("Connected to dev db")
         }
     }
     catch (error) {
@@ -21,4 +25,19 @@ async function connectDb() {
     }
 }
 
-module.exports = connectDb();
+async function closeDb() {
+    try {
+        if (process.env.NODE_ENV === 'test' && mongoServer) {
+            await mongoose.connection.close();
+            await mongoServer.stop();
+        } else {
+            mongoose.connection.close();
+        }
+    }
+    catch (error) {
+        console.error("Error closing mongodb connection", error.message);
+        process.exit(1); //Exit process with failure
+    }
+}
+
+module.exports = { connectDb, closeDb };

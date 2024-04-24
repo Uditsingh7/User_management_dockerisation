@@ -2,7 +2,7 @@ const express = require("express");
 const { router } = require('./src/routes/index');
 const cors = require("cors");
 const mongoose = require('mongoose');
-const connectDb = require("./db");
+const { connectDb } = require("./db");
 
 
 const app = express();
@@ -21,7 +21,7 @@ app.use('/api/v1', router);
 
 const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-    connectDb;
+    connectDb();
 });
 
 app.get("/", (req, res) => {
