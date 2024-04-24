@@ -1,1 +1,10 @@
-node_modules
+# Dependency directories
+node_modules/
+
+# Environment variables file
+.env
+
+# Editor-specific files
+.vscode/
+.idea/
+
