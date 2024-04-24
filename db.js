@@ -1,10 +1,19 @@
 const mongoose = require('mongoose');
-const dotenv = require('dotenv').config();
+const { MongoMemoryServer } = require('mongodb-memory-server');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
 async function connectDb() {
     try {
-        const uri = process.env.MONGODB_URI;
-        await mongoose.connect(uri);
-        console.log('Connected to MongoDB');
+        if (process.env.NODE_ENV === 'test') {
+            mongoServer = await MongoMemoryServer.create();
+            const uri = mongoServer.getUri();
+            await mongoose.connect(uri);
+        } else {
+            const uri = process.env.MONGODB_URI;
+            await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+        }
     }
     catch (error) {
         console.error("Connection to mongodb failed", error.message);

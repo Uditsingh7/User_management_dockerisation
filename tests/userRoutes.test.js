@@ -2,6 +2,12 @@ const request = require('supertest');
 const server = require('../index.js');
 const User = require('../src/models/User.js');
 const mongoose = require('mongoose');
+const dotenv = require("dotenv");
+
+// Load environment variables from .env file
+dotenv.config();
+
+process.env.NODE_ENV = "test";
 
 
 // Mock User data for testing
@@ -27,7 +33,7 @@ describe('User Management API Endpoints', () => {
     // Close the server after running all the test cases
     afterAll(async () => {
         await User.findByIdAndDelete(userId);
-        server.close();
+        await server.close();
         mongoose.connection.close();
     });
 
