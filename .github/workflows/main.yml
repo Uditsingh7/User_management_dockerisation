@@ -9,12 +9,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      mongo:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        options: --name mongo-test
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Start MongoDB
-      run: docker run --name mongo-test -d -p 27017:27017 mongo:latest
+    - name: Wait for MongoDB to Initialize
+      run: sleep 20s
 
     - name: Print MongoDB Logs
       run: docker logs mongo-test
@@ -23,15 +30,13 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '16.x'
-        environment: NODE_ENV=test  
+        environment: NODE_ENV=test
+        MONGODB_URI: mongodb://localhost:27017/testDB
 
     - name: Build and test
       run: |
         docker build -f Dockerfile.test -t user-alchemy-test .
-        docker run user-alchemy-test
-
-    - name: Stop MongoDB
-      run: docker stop mongo-test
+        docker run -e MONGODB_URI=$MONGODB_URI user-alchemy-test
 
   deploy:
     needs: build
