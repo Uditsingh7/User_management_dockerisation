@@ -24,6 +24,10 @@ const server = app.listen(PORT, () => {
     connectDb;
 });
 
+app.get("/", (req, res) => {
+    res.end("<h1>Welcome to the API</h1><p>This is a simple NodeJS RESTful API using Express and MongoDB.</p>")
+})
+
 // Handle graceful shutdown
 const gracefulShutdown = () => {
     mongoose.connection.close(() => {
