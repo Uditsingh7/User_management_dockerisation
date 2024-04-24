@@ -16,6 +16,9 @@ jobs:
     - name: Start MongoDB
       run: docker run --name mongo-test -d -p 27017:27017 mongo:latest
 
+    - name: Print MongoDB Logs
+      run: docker logs mongo-test
+
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
