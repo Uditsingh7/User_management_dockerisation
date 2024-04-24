@@ -1,0 +1,35 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build and test
+      run: |
+        docker build -f Dockerfile.test -t user-alchemy-test .
+        docker run user-alchemy-test
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Login to Heroku Container Registry
+      run: heroku container:login
+
+    - name: Build and push Docker image to Heroku
+      run: |
+        heroku container:push web -a user-alchemy
+        heroku container:release web -a user-alchemy
