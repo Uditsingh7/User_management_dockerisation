@@ -30,11 +30,10 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '16.x'
-        environment: NODE_ENV=test
-        MONGODB_URI: mongodb://localhost:27017/testDB
 
     - name: Build and test
       run: |
+        MONGODB_URI=mongodb://localhost:27017/testDB
         docker build -f Dockerfile.test -t user-alchemy-test .
         docker run -e MONGODB_URI=$MONGODB_URI user-alchemy-test
 
