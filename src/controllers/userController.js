@@ -1,6 +1,7 @@
-const zod = require("zod");
+const zod = require("zod"); // importing zod middleware for validating input
 const User = require("../models/User");
 
+// create user req body  validation schema using Zod
 const signupBody = zod.object({
     email: zod.string().email(),
     firstName: zod.string(),
@@ -9,6 +10,7 @@ const signupBody = zod.object({
     mobileNumber: zod.string()
 })
 
+// update user req body  validation schema using Zod
 const updateUserBody = zod.object({
     email: zod.string().email().optional(),
     firstName: zod.string().optional(),
@@ -21,7 +23,9 @@ const updateUserBody = zod.object({
 // Create a new user
 const createUser = async (req, res) => {
     try {
+         // check for zod validation  error 
         const { success, error } = signupBody.safeParse(req.body)
+        //and throw if there is one
         if (!success) {
             return res.status(400).json({
                 success: false,
@@ -29,11 +33,13 @@ const createUser = async (req, res) => {
                 errors: error.formErrors.fieldErrors
             })
         }
-        console.log('Checking email:', req.body.email);  // Debug log
+
+        //checking if the user already exists in the database
         const existingUser = await User.findOne({
             email: req.body.email
         })
 
+        // send error responseif exists
         if (existingUser) {
             return res.status(409).json({
                 success: false,
@@ -43,7 +49,7 @@ const createUser = async (req, res) => {
                 }
             })
         }
-
+        // If all fine, create the  user
         const user = await User.create({
             email: req.body.email,
             password: req.body.password,
@@ -109,7 +115,9 @@ const getAllUsers = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
+         // check for zod validation  error 
         const { success, data, error } = updateUserBody.safeParse(req.body);
+        //and throw if there is one
         if (!success) {
             return res.status(400).json({
                 success: false,
@@ -118,16 +126,19 @@ const updateUser = async (req, res) => {
             })
         }
         const id = req.params.userId;
-        console.log("User Id in update controller: ", id);
 
+        // Find the useer byid and then update
         const user = await User.findByIdAndUpdate(id, data, { new: true })
-        console.log("User  after updating : ", user);
+
+        // if not found, throw error
         if (!user) {
             return res.status(404).json({
                 success: false,
                 message: "User Not found!"
             })
         }
+
+        // send success response
         res.status(200).json({
             success: true,
             message: "User updated successfully!",
