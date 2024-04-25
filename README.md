@@ -46,6 +46,21 @@ Before diving into the arcane world, ensure you possess the following artifacts:
     ```bash
     npm install
     ```
+### 🧪 Setting up Environment Variables
+
+**Prepare the .env Configuration**:
+
+Copy the `.env.example` file to create a `.env` file. Update the MongoDB URI in the `.env` file with your MongoDB Atlas connection string.
+
+```bash
+cp .env.example .env
+```
+
+Open the `.env` file and replace `your_mongodb_connection_string` with your actual MongoDB Atlas connection string:
+
+```makefile
+MONGODB_URI=your_mongodb_connection_string
+```
 
 ### 🌌 Casting the Spell
 
