@@ -70,13 +70,13 @@ MONGODB_URI=your_mongodb_connection_string
 npm run start
 ```
 
-The enchanted API will awaken at `http://localhost:3000`.
+The enchanted API will awaken at `http://localhost:3001`.
 
 #### 🐳 Docker Spellcasting
 
 ```bash
 docker build -t user-management-api .
-docker run -p 3000:3000 user-management-api
+docker run -p 3001:3001 user-management-api
 ```
 
 ### 🧪 Testing the Incantations
@@ -89,7 +89,7 @@ npm test
 
 ### 📖 The  Swagger Grimoire documentation
 
-Access the interactive spellbook at `http://localhost:3000/api-docs`.
+Access the interactive spellbook at `http://localhost:3001/api-docs`.
 
 ## 🚀 The Celestial Deployment
 
