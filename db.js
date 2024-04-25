@@ -8,6 +8,8 @@ let mongoServer;
 
 async function connectDb() {
     try {
+
+        // use in memory mongo memeory server and env as test
         if (process.env.NODE_ENV === 'test') {
             mongoServer = await MongoMemoryServer.create();
             const uri = mongoServer.getUri();
@@ -21,7 +23,8 @@ async function connectDb() {
     }
     catch (error) {
         console.error("Connection to mongodb failed", error.message);
-        process.exit(1); //Exit process with failure
+        //Exit process with failure
+        process.exit(1); 
     }
 }
 
@@ -36,7 +39,8 @@ async function closeDb() {
     }
     catch (error) {
         console.error("Error closing mongodb connection", error.message);
-        process.exit(1); //Exit process with failure
+        //Exit process with failure
+        process.exit(1); 
     }
 }
 
