@@ -3,6 +3,7 @@ const { router } = require('./src/routes/index');
 const cors = require("cors");
 const mongoose = require('mongoose');
 const { connectDb } = require("./db");
+const swaggerDocs = require('./swagger')
 
 
 const app = express();
@@ -22,6 +23,7 @@ app.use('/api/v1', router);
 const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     connectDb();
+    swaggerDocs(app, PORT)
 });
 
 app.get("/", (req, res) => {
@@ -39,4 +41,5 @@ const gracefulShutdown = () => {
 process.on('SIGINT', gracefulShutdown);
 process.on('SIGTERM', gracefulShutdown);
 
-module.exports = server;  // Export the server instance
+// Export the server instance
+module.exports = server;  
